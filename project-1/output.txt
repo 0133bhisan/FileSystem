@@ -1,0 +1,3704 @@
+DEBUG [1]: 
+;;; Stub code
+
+
+	;; The kernel will have placed the process's allocation size (i.e., its virtual limit) in %SP, thus initializing the stack.
+	;; Initialize fp.
+	COPY		%FP		%SP				; fp = sp
+@(0x00000000 + 0x00000000):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+
+	;; Call main() to enter the program proper.
+	SUBUS		%SP		%SP		12		; Push: pfp / ra / rv
+@(0x00000000 + 0x00000010):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	COPY		*%SP		%FP				; pfp = fp
+@(0x00000000 + 0x00000020):	COPY		*%SP [*%SP]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; fp = sp
+@(0x00000000 + 0x00000030):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = &ra
+@(0x00000000 + 0x00000040):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	CALL		+_procedure_main		*%G0		; Call main().
+@(0x00000000 + 0x00000050):	CALL		+0x00001490 [+_procedure_main]	*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Exit, copying the return value from main() as the result code.
+	ADDUS		%SP		%SP		4		; Pop: pfp / ra; push: syscall 
+@(0x00000000 + 0x00000060):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0x1001				; syscall 
+@(0x00000000 + 0x00000070):	COPY		*%SP [*%SP]	0x00001001 [0x1001]
+DEBUG [1]: 
+	SYSC
+@(0x00000000 + 0x00000080):	SYSC	
+DEBUG [1]: 
+
+
+	;; Procedure entry point
+_procedure_init:
+
+	;; Callee for init: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00000090):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000000a0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Push integer value 0x00001000 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x000000b0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0x00001000				; Copy the value
+@(0x00000000 + 0x000000c0):	COPY		*%SP [*%SP]	0x00001000 [0x00001000]
+DEBUG [1]: 
+
+	;; Call to =:   Argument #0
+	;; Reference device_table_entry_ptr
+	;; Push the address of dynamic variable device_table_entry_ptr
+
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x000000d0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		*%SP		%FP		-4		; src = %FP + offset
+@(0x00000000 + 0x000000e0):	ADDUS		*%SP [*%SP]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x000000f0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000100):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000110):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000120):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00000130):	CALL		+0x00001580 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000140):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000150):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000160):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; While 35: (a) Evaluate the conditional expression, leaving its result on top of the stack
+_procedure_init_loop_35_top:
+
+	;; Call to not: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000170):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to not: (prologue b) Evaluate and push arguments
+	;; Call to not:   Argument #0
+	;; Call to ==: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000180):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to ==: (prologue b) Evaluate and push arguments
+	;; Call to ==:   Argument #1
+	;; Push integer value 5 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00000190):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		5				; Copy the value
+@(0x00000000 + 0x000001a0):	COPY		*%SP [*%SP]	0x00000005 [5]
+DEBUG [1]: 
+
+	;; Call to ==:   Argument #0
+	;; Dereference #22: Prelude -- evaluate the src pointer
+	;; Identifier evaluation: device_table_entry_ptr
+
+	;; Evaluate dynamic variable device_table_entry_ptr
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000001b0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000001c0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000001d0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	COPY		%G0		*%SP				; %G0 = src
+@(0x00000000 + 0x000001e0):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop src pointer
+@(0x00000000 + 0x000001f0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	SUBUS		%SP		%SP		4		; Push dst space
+@(0x00000000 + 0x00000200):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00000210):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000220):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000230):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000240):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to ==
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000250):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_==		*%G0				; Do call
+@(0x00000000 + 0x00000260):	CALL		+0x00002490 [+_procedure_==]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000270):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000280):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000290):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to not: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		4		; %G0 = &pfp
+@(0x00000000 + 0x000002a0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000002b0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000002c0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to not
+	ADDUS		%G0		%SP		8		; %G0 = &ra
+@(0x00000000 + 0x000002d0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	CALL		+_procedure_not		*%G0				; Do call
+@(0x00000000 + 0x000002e0):	CALL		+0x00001f70 [+_procedure_not]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		4		; %G0 = &pfp
+@(0x00000000 + 0x000002f0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000300):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		12		; Pop args/pfp/ra
+@(0x00000000 + 0x00000310):	ADDUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; While 35: (b) Pop conditional result and branch (or not)
+	COPY		%G0		*%SP				; Copy result
+@(0x00000000 + 0x00000320):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop result
+@(0x00000000 + 0x00000330):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	BEQ		_procedure_init_loop_35_end		%G0		0		; Jump if false
+@(0x00000000 + 0x00000340):	BEQ		0x000004f0 [_procedure_init_loop_35_end]	%G0 [%G0]	0x00000000 [0]
+DEBUG [1]: 
+	;; While 35: (c) Body
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000350):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Call to +: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000360):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to +: (prologue b) Evaluate and push arguments
+	;; Call to +:   Argument #1
+	;; Push integer value 12 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00000370):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		12				; Copy the value
+@(0x00000000 + 0x00000380):	COPY		*%SP [*%SP]	0x0000000c [12]
+DEBUG [1]: 
+
+	;; Call to +:   Argument #0
+	;; Identifier evaluation: device_table_entry_ptr
+
+	;; Evaluate dynamic variable device_table_entry_ptr
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00000390):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000003a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000003b0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x000003c0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000003d0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000003e0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to +
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x000003f0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_+		*%G0				; Do call
+@(0x00000000 + 0x00000400):	CALL		+0x00001fb0 [+_procedure_+]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000410):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000420):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000430):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference device_table_entry_ptr
+	;; Push the address of dynamic variable device_table_entry_ptr
+
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00000440):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		*%SP		%FP		-4		; src = %FP + offset
+@(0x00000000 + 0x00000450):	ADDUS		*%SP [*%SP]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000460):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000470):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000480):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000490):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x000004a0):	CALL		+0x00001210 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x000004b0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000004c0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000004d0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; While 35: (d) Iterate
+	JUMP		_procedure_init_loop_35_top						; Jump to top of loop
+@(0x00000000 + 0x000004e0):	JUMP		0x00000170 [_procedure_init_loop_35_top]
+DEBUG [1]: 
+	;; While 35: (e) Loop's end
+_procedure_init_loop_35_end:
+
+	NOOP								; Placeholder
+@(0x00000000 + 0x000004f0):	NOOP	
+DEBUG [1]: 
+	;; Statement #2 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000500):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Dereference #44: Prelude -- evaluate the src pointer
+	;; Call to +: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000510):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to +: (prologue b) Evaluate and push arguments
+	;; Call to +:   Argument #1
+	;; Push integer value 4 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00000520):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		4				; Copy the value
+@(0x00000000 + 0x00000530):	COPY		*%SP [*%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Call to +:   Argument #0
+	;; Identifier evaluation: device_table_entry_ptr
+
+	;; Evaluate dynamic variable device_table_entry_ptr
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00000540):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00000550):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00000560):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000570):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000580):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000590):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to +
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x000005a0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_+		*%G0				; Do call
+@(0x00000000 + 0x000005b0):	CALL		+0x00001e00 [+_procedure_+]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x000005c0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000005d0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000005e0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	COPY		%G0		*%SP				; %G0 = src
+@(0x00000000 + 0x000005f0):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop src pointer
+@(0x00000000 + 0x00000600):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	SUBUS		%SP		%SP		4		; Push dst space
+@(0x00000000 + 0x00000610):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00000620):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference block_base
+	;; Reference static variable block_base: 
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00000630):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		_static_block_base				; Copy address
+@(0x00000000 + 0x00000640):	COPY		*%SP [*%SP]	0x00003730 [_static_block_base]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000650):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000660):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000670):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000680):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00000690):	CALL		+0x00001020 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x000006a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000006b0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000006c0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #3 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000006d0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Dereference #54: Prelude -- evaluate the src pointer
+	;; Call to +: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000006e0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to +: (prologue b) Evaluate and push arguments
+	;; Call to +:   Argument #1
+	;; Push integer value 8 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x000006f0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		8				; Copy the value
+@(0x00000000 + 0x00000700):	COPY		*%SP [*%SP]	0x00000008 [8]
+DEBUG [1]: 
+
+	;; Call to +:   Argument #0
+	;; Identifier evaluation: device_table_entry_ptr
+
+	;; Evaluate dynamic variable device_table_entry_ptr
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00000710):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00000720):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00000730):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000740):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000750):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000760):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to +
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000770):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_+		*%G0				; Do call
+@(0x00000000 + 0x00000780):	CALL		+0x00001c30 [+_procedure_+]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000790):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000007a0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000007b0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	COPY		%G0		*%SP				; %G0 = src
+@(0x00000000 + 0x000007c0):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop src pointer
+@(0x00000000 + 0x000007d0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	SUBUS		%SP		%SP		4		; Push dst space
+@(0x00000000 + 0x000007e0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000007f0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference block_limit
+	;; Reference static variable block_limit: 
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00000800):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		_static_block_limit				; Copy address
+@(0x00000000 + 0x00000810):	COPY		*%SP [*%SP]	0x00003734 [_static_block_limit]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000820):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000830):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000840):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000850):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00000860):	CALL		+0x00000e50 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000870):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000880):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000890):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #4 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000008a0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Call to -: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000008b0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to -: (prologue b) Evaluate and push arguments
+	;; Call to -:   Argument #1
+	;; Push integer value 8 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x000008c0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		8				; Copy the value
+@(0x00000000 + 0x000008d0):	COPY		*%SP [*%SP]	0x00000008 [8]
+DEBUG [1]: 
+
+	;; Call to -:   Argument #0
+	;; Identifier evaluation: block_limit
+
+	;; Evaluate static variable block_limit: (a) Allocate space at the top of the stack
+	SUBUS		%SP		%SP		4		; Push space
+@(0x00000000 + 0x000008e0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Evaluate static variable block_limit: (b) Copy single-word value
+	COPY		*%SP		*_static_block_limit				; Copy value
+@(0x00000000 + 0x000008f0):	COPY		*%SP [*%SP]	*0x00003734 [*_static_block_limit]
+DEBUG [1]: 
+	;; Call to -: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000900):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000910):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000920):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to -
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000930):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_-		*%G0				; Do call
+@(0x00000000 + 0x00000940):	CALL		+0x00001b40 [+_procedure_-]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000950):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000960):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000970):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference block_indexer
+	;; Reference static variable block_indexer: 
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00000980):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		_static_block_indexer				; Copy address
+@(0x00000000 + 0x00000990):	COPY		*%SP [*%SP]	0x00003738 [_static_block_indexer]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x000009a0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000009b0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000009c0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x000009d0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x000009e0):	CALL		+0x00000cd0 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x000009f0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000a00):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000a10):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #5 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000a20):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Call to -: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000a30):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to -: (prologue b) Evaluate and push arguments
+	;; Call to -:   Argument #1
+	;; Push integer value 4 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00000a40):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		4				; Copy the value
+@(0x00000000 + 0x00000a50):	COPY		*%SP [*%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Call to -:   Argument #0
+	;; Identifier evaluation: block_limit
+
+	;; Evaluate static variable block_limit: (a) Allocate space at the top of the stack
+	SUBUS		%SP		%SP		4		; Push space
+@(0x00000000 + 0x00000a60):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Evaluate static variable block_limit: (b) Copy single-word value
+	COPY		*%SP		*_static_block_limit				; Copy value
+@(0x00000000 + 0x00000a70):	COPY		*%SP [*%SP]	*0x00003734 [*_static_block_limit]
+DEBUG [1]: 
+	;; Call to -: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000a80):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000a90):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000aa0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to -
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000ab0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_-		*%G0				; Do call
+@(0x00000000 + 0x00000ac0):	CALL		+0x000019c0 [+_procedure_-]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000ad0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000ae0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000af0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference block_trigger
+	;; Reference static variable block_trigger: 
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00000b00):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		_static_block_trigger				; Copy address
+@(0x00000000 + 0x00000b10):	COPY		*%SP [*%SP]	0x0000373c [_static_block_trigger]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000b20):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000b30):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000b40):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000b50):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00000b60):	CALL		+0x00000b50 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000b70):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000b80):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000b90):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+_procedure_init_epilogue:
+
+	;; Callee for init: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00000ba0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = &ra
+@(0x00000000 + 0x00000bb0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00000bc0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_write:
+
+	;; Callee for write: (prologue) Push locals
+	SUBUS		%SP		%SP		5		; Push locals
+@(0x00000000 + 0x00000bd0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000005 [5]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000be0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Identifier evaluation: block_base
+
+	;; Evaluate static variable block_base: (a) Allocate space at the top of the stack
+	SUBUS		%SP		%SP		4		; Push space
+@(0x00000000 + 0x00000bf0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Evaluate static variable block_base: (b) Copy single-word value
+	COPY		*%SP		*_static_block_base				; Copy value
+@(0x00000000 + 0x00000c00):	COPY		*%SP [*%SP]	*0x00003730 [*_static_block_base]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference block_address
+	;; Push the address of dynamic variable block_address
+
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00000c10):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		*%SP		%FP		-5		; src = %FP + offset
+@(0x00000000 + 0x00000c20):	ADDUS		*%SP [*%SP]	%FP [%FP]	0xfffffffb [-5]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000c30):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000c40):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000c50):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000c60):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00000c70):	CALL		+0x00000a40 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000c80):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000c90):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000ca0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000cb0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Identifier evaluation: block_number
+
+	;; Evaluate dynamic variable block_number
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00000cc0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00000cd0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00000ce0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Identifier evaluation: block_indexer
+
+	;; Evaluate static variable block_indexer: (a) Allocate space at the top of the stack
+	SUBUS		%SP		%SP		4		; Push space
+@(0x00000000 + 0x00000cf0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Evaluate static variable block_indexer: (b) Copy single-word value
+	COPY		*%SP		*_static_block_indexer				; Copy value
+@(0x00000000 + 0x00000d00):	COPY		*%SP [*%SP]	*0x00003738 [*_static_block_indexer]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000d10):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000d20):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000d30):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00000d40):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00000d50):	CALL		+0x00000960 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00000d60):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000d70):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00000d80):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #2 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000d90):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Dereference #97: Prelude -- evaluate the src pointer
+	;; Identifier evaluation: strptr
+
+	;; Evaluate dynamic variable strptr
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00000da0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00000db0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00000dc0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	COPY		%G0		*%SP				; %G0 = src
+@(0x00000000 + 0x00000dd0):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop src pointer
+@(0x00000000 + 0x00000de0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	SUBUS		%SP		%SP		1		; Push dst space
+@(0x00000000 + 0x00000df0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000001 [1]
+DEBUG [1]: 
+	COPY		%G1		%SP				; %G1 = dst
+@(0x00000000 + 0x00000e00):	COPY		%G1 [%G1]	%SP [%SP]
+DEBUG [1]: 
+	COPY		%G2		0				; %G2 = i (words to copy)
+@(0x00000000 + 0x00000e10):	COPY		%G2 [%G2]	0x00000000 [0]
+DEBUG [1]: 
+_write_dereference_loop_97_top:
+
+	BEQ		+_write_dereference_loop_97_end		%G2		0		; If i == 0, jump endLabel
+@(0x00000000 + 0x00000e20):	BEQ		+0x00000060 [+_write_dereference_loop_97_end]	%G2 [%G2]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%G1		*%G0				; *dst = *src
+@(0x00000000 + 0x00000e30):	COPY		*%G1 [*%G1]	*%G0 [*%G0]
+DEBUG [1]: 
+	ADDUS		%G0		%G0		4		; src++
+@(0x00000000 + 0x00000e40):	ADDUS		%G0 [%G0]	%G0 [%G0]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G1		%G1		4		; dst++
+@(0x00000000 + 0x00000e50):	ADDUS		%G1 [%G1]	%G1 [%G1]	0x00000004 [4]
+DEBUG [1]: 
+	SUB		%G2		%G2		1		; i--
+@(0x00000000 + 0x00000e60):	SUB		%G2 [%G2]	%G2 [%G2]	0x00000001 [1]
+DEBUG [1]: 
+	JUMP		+_write_dereference_loop_97_top						; End loop body
+@(0x00000000 + 0x00000e70):	JUMP		+0xffffffb0 [+_write_dereference_loop_97_top]
+DEBUG [1]: 
+_write_dereference_loop_97_end:
+
+	NOOP								; Dereference copy loop end placeholder
+@(0x00000000 + 0x00000e80):	NOOP	
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference current_char
+	;; Push the address of dynamic variable current_char
+
+	SUBUS		%SP		%SP		1		; Push pointer space
+@(0x00000000 + 0x00000e90):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000001 [1]
+DEBUG [1]: 
+	ADDUS		*%SP		%FP		-4		; src = %FP + offset
+@(0x00000000 + 0x00000ea0):	ADDUS		*%SP [*%SP]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		5		; %G0 = &pfp
+@(0x00000000 + 0x00000eb0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000005 [5]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00000ec0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00000ed0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		9		; %G0 = &ra
+@(0x00000000 + 0x00000ee0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000009 [9]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00000ef0):	CALL		+0x000007c0 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		5		; %G0 = &pfp
+@(0x00000000 + 0x00000f00):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000005 [5]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00000f10):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		13		; Pop args/pfp/ra
+@(0x00000000 + 0x00000f20):	ADDUS		%SP [%SP]	%SP [%SP]	0x0000000d [13]
+DEBUG [1]: 
+	;; Statement #3 of begin-end statement
+	;; While 116: (a) Evaluate the conditional expression, leaving its result on top of the stack
+_procedure_write_loop_116_top:
+
+	;; Call to !=: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00000f30):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to !=: (prologue b) Evaluate and push arguments
+	;; Call to !=:   Argument #1
+	;; Push integer value 0 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00000f40):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0				; Copy the value
+@(0x00000000 + 0x00000f50):	COPY		*%SP [*%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Call to !=:   Argument #0
+	;; Identifier evaluation: current_char
+
+	;; Evaluate dynamic variable current_char
+	SUBUS		%SP		%SP		1		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00000f60):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000001 [1]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00000f70):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		%G1		%SP				; %G1 = dst
+@(0x00000000 + 0x00000f80):	COPY		%G1 [%G1]	%SP [%SP]
+DEBUG [1]: 
+	COPY		%G2		0				; i = 0
+@(0x00000000 + 0x00000f90):	COPY		%G2 [%G2]	0x00000000 [0]
+DEBUG [1]: 
+_current_char_eval_copy_loop_7_top:
+
+	BEQ		+_current_char_eval_copy_loop_7_end		%G2		1		; while (i != size)
+@(0x00000000 + 0x00000fa0):	BEQ		+0x00000060 [+_current_char_eval_copy_loop_7_end]	%G2 [%G2]	0x00000001 [1]
+DEBUG [1]: 
+	COPY		*%G1		*%G0				; *dst = *src
+@(0x00000000 + 0x00000fb0):	COPY		*%G1 [*%G1]	*%G0 [*%G0]
+DEBUG [1]: 
+	ADDUS		%G0		%G1		4		; dst = dst + |word|
+@(0x00000000 + 0x00000fc0):	ADDUS		%G0 [%G0]	%G1 [%G1]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G1		%G1		4		; src = src + |word|
+@(0x00000000 + 0x00000fd0):	ADDUS		%G1 [%G1]	%G1 [%G1]	0x00000004 [4]
+DEBUG [1]: 
+	ADD		%G2		%G2		1		; i = i + 1
+@(0x00000000 + 0x00000fe0):	ADD		%G2 [%G2]	%G2 [%G2]	0x00000001 [1]
+DEBUG [1]: 
+	JUMP		+_current_char_eval_copy_loop_7_top						; Iterate
+@(0x00000000 + 0x00000ff0):	JUMP		+0xffffffb0 [+_current_char_eval_copy_loop_7_top]
+DEBUG [1]: 
+_current_char_eval_copy_loop_7_end:
+
+	NOOP								; Placeholder for end of copy loop 7
+@(0x00000000 + 0x00001000):	NOOP	
+DEBUG [1]: 
+
+	;; Call to !=: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		5		; %G0 = &pfp
+@(0x00000000 + 0x00001010):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000005 [5]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00001020):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00001030):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to !=
+	ADDUS		%G0		%SP		9		; %G0 = &ra
+@(0x00000000 + 0x00001040):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000009 [9]
+DEBUG [1]: 
+	CALL		+_procedure_!=		*%G0				; Do call
+@(0x00000000 + 0x00001050):	CALL		+0x00001970 [+_procedure_!=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		5		; %G0 = &pfp
+@(0x00000000 + 0x00001060):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000005 [5]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001070):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		13		; Pop args/pfp/ra
+@(0x00000000 + 0x00001080):	ADDUS		%SP [%SP]	%SP [%SP]	0x0000000d [13]
+DEBUG [1]: 
+	;; While 116: (b) Pop conditional result and branch (or not)
+	COPY		%G0		*%SP				; Copy result
+@(0x00000000 + 0x00001090):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop result
+@(0x00000000 + 0x000010a0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	BEQ		_procedure_write_loop_116_end		%G0		0		; Jump if false
+@(0x00000000 + 0x000010b0):	BEQ		0x000013d0 [_procedure_write_loop_116_end]	%G0 [%G0]	0x00000000 [0]
+DEBUG [1]: 
+	;; While 116: (c) Body
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000010c0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Identifier evaluation: current_char
+
+	;; Evaluate dynamic variable current_char
+	SUBUS		%SP		%SP		1		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000010d0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000001 [1]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000010e0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		%G1		%SP				; %G1 = dst
+@(0x00000000 + 0x000010f0):	COPY		%G1 [%G1]	%SP [%SP]
+DEBUG [1]: 
+	COPY		%G2		0				; i = 0
+@(0x00000000 + 0x00001100):	COPY		%G2 [%G2]	0x00000000 [0]
+DEBUG [1]: 
+_current_char_eval_copy_loop_8_top:
+
+	BEQ		+_current_char_eval_copy_loop_8_end		%G2		1		; while (i != size)
+@(0x00000000 + 0x00001110):	BEQ		+0x00000060 [+_current_char_eval_copy_loop_8_end]	%G2 [%G2]	0x00000001 [1]
+DEBUG [1]: 
+	COPY		*%G1		*%G0				; *dst = *src
+@(0x00000000 + 0x00001120):	COPY		*%G1 [*%G1]	*%G0 [*%G0]
+DEBUG [1]: 
+	ADDUS		%G0		%G1		4		; dst = dst + |word|
+@(0x00000000 + 0x00001130):	ADDUS		%G0 [%G0]	%G1 [%G1]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G1		%G1		4		; src = src + |word|
+@(0x00000000 + 0x00001140):	ADDUS		%G1 [%G1]	%G1 [%G1]	0x00000004 [4]
+DEBUG [1]: 
+	ADD		%G2		%G2		1		; i = i + 1
+@(0x00000000 + 0x00001150):	ADD		%G2 [%G2]	%G2 [%G2]	0x00000001 [1]
+DEBUG [1]: 
+	JUMP		+_current_char_eval_copy_loop_8_top						; Iterate
+@(0x00000000 + 0x00001160):	JUMP		+0xffffffb0 [+_current_char_eval_copy_loop_8_top]
+DEBUG [1]: 
+_current_char_eval_copy_loop_8_end:
+
+	NOOP								; Placeholder for end of copy loop 8
+@(0x00000000 + 0x00001170):	NOOP	
+DEBUG [1]: 
+
+	;; Call to =:   Argument #0
+	;; Identifier evaluation: block_address
+
+	;; Evaluate dynamic variable block_address
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001180):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-5		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001190):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffb [-5]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000011a0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		5		; %G0 = &pfp
+@(0x00000000 + 0x000011b0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000005 [5]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000011c0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000011d0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		9		; %G0 = &ra
+@(0x00000000 + 0x000011e0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000009 [9]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x000011f0):	CALL		+0x000004c0 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		5		; %G0 = &pfp
+@(0x00000000 + 0x00001200):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000005 [5]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001210):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		13		; Pop args/pfp/ra
+@(0x00000000 + 0x00001220):	ADDUS		%SP [%SP]	%SP [%SP]	0x0000000d [13]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00001230):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Call to +: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00001240):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to +: (prologue b) Evaluate and push arguments
+	;; Call to +:   Argument #1
+	;; Push integer value 1 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00001250):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		1				; Copy the value
+@(0x00000000 + 0x00001260):	COPY		*%SP [*%SP]	0x00000001 [1]
+DEBUG [1]: 
+
+	;; Call to +:   Argument #0
+	;; Identifier evaluation: block_address
+
+	;; Evaluate dynamic variable block_address
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001270):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-5		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001280):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffb [-5]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001290):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x000012a0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000012b0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000012c0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to +
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x000012d0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_+		*%G0				; Do call
+@(0x00000000 + 0x000012e0):	CALL		+0x000010d0 [+_procedure_+]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x000012f0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001300):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to +: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00001310):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference block_address
+	;; Push the address of dynamic variable block_address
+
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00001320):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		*%SP		%FP		-5		; src = %FP + offset
+@(0x00000000 + 0x00001330):	ADDUS		*%SP [*%SP]	%FP [%FP]	0xfffffffb [-5]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001340):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00001350):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00001360):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00001370):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00001380):	CALL		+0x00000330 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001390):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000013a0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000013b0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; While 116: (d) Iterate
+	JUMP		_procedure_write_loop_116_top						; Jump to top of loop
+@(0x00000000 + 0x000013c0):	JUMP		0x00000f30 [_procedure_write_loop_116_top]
+DEBUG [1]: 
+	;; While 116: (e) Loop's end
+_procedure_write_loop_116_end:
+
+	NOOP								; Placeholder
+@(0x00000000 + 0x000013d0):	NOOP	
+DEBUG [1]: 
+	;; Statement #4 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000013e0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Push integer value 1 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x000013f0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		1				; Copy the value
+@(0x00000000 + 0x00001400):	COPY		*%SP [*%SP]	0x00000001 [1]
+DEBUG [1]: 
+
+	;; Call to =:   Argument #0
+	;; Identifier evaluation: block_trigger
+
+	;; Evaluate static variable block_trigger: (a) Allocate space at the top of the stack
+	SUBUS		%SP		%SP		4		; Push space
+@(0x00000000 + 0x00001410):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Evaluate static variable block_trigger: (b) Copy single-word value
+	COPY		*%SP		*_static_block_trigger				; Copy value
+@(0x00000000 + 0x00001420):	COPY		*%SP [*%SP]	*0x0000373c [*_static_block_trigger]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001430):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00001440):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00001450):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00001460):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00001470):	CALL		+0x00000240 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001480):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001490):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000014a0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+_procedure_write_epilogue:
+
+	;; Callee for write: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x000014b0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x000014c0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x000014d0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_main:
+
+	;; Callee for main: (prologue) Push locals
+	SUBUS		%SP		%SP		0		; Push locals
+@(0x00000000 + 0x000014e0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Call to init: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		8		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000014f0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	;; Call to init: (prologue b) Evaluate and push arguments
+	;; Call to init: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		0		; %G0 = &pfp
+@(0x00000000 + 0x00001500):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00001510):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00001520):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to init
+	ADDUS		%G0		%SP		4		; %G0 = &ra
+@(0x00000000 + 0x00001530):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	CALL		+_procedure_init		*%G0				; Do call
+@(0x00000000 + 0x00001540):	CALL		+0xffffeb50 [+_procedure_init]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to init: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		0		; %G0 = &pfp
+@(0x00000000 + 0x00001550):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001560):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to init: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		8		; Pop args/pfp/ra
+@(0x00000000 + 0x00001570):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Call to write: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		8		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00001580):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	;; Call to write: (prologue b) Evaluate and push arguments
+	;; Call to write:   Argument #0
+	;; Identifier evaluation: message
+
+	;; String pointer variable message: 
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00001590):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		+_string_message				; Copy address
+@(0x00000000 + 0x000015a0):	COPY		*%SP [*%SP]	+0x000021a0 [+_string_message]
+DEBUG [1]: 
+	;; Call to write: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		4		; %G0 = &pfp
+@(0x00000000 + 0x000015b0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000015c0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000015d0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to write
+	ADDUS		%G0		%SP		8		; %G0 = &ra
+@(0x00000000 + 0x000015e0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	CALL		+_procedure_write		*%G0				; Do call
+@(0x00000000 + 0x000015f0):	CALL		+0xfffff5e0 [+_procedure_write]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to write: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		4		; %G0 = &pfp
+@(0x00000000 + 0x00001600):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001610):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to write: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		12		; Pop args/pfp/ra
+@(0x00000000 + 0x00001620):	ADDUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Statement #2 of begin-end statement
+	;; Return statement 132 from main: (a) Evaluate the expression and prepare the destination
+	;; Push integer value 3 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00001630):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		3				; Copy the value
+@(0x00000000 + 0x00001640):	COPY		*%SP [*%SP]	0x00000003 [3]
+DEBUG [1]: 
+
+	;; Return statement 132 from main: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00001650):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00001660):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 132 from main: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_main_epilogue						; Return to caller
+@(0x00000000 + 0x00001670):	JUMP		+0x00000010 [+_procedure_main_epilogue]
+DEBUG [1]: 
+_procedure_main_epilogue:
+
+	;; Callee for main: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00001680):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = &ra
+@(0x00000000 + 0x00001690):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x000016a0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_=:
+
+	;; Callee for =: (prologue) Push locals
+	SUBUS		%SP		%SP		0		; Push locals
+@(0x00000000 + 0x000016b0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	4	; %G0 = &value
+@(0x00000000 + 0x000016c0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+       COPY	 %G1	*%FP		; %G1 = destination
+@(0x00000000 + 0x000016d0):	COPY		%G1 [%G1]	*%FP [*%FP]
+DEBUG [1]: 
+	      COPY	 *%G1	*%G0		; *destination = value
+@(0x00000000 + 0x000016e0):	COPY		*%G1 [*%G1]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 144 from =: (a) Evaluate the expression and prepare the destination
+	;; Dereference #143: Prelude -- evaluate the src pointer
+	;; Identifier evaluation: destination
+
+	;; Evaluate dynamic variable destination
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000016f0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001700):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001710):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	COPY		%G0		*%SP				; %G0 = src
+@(0x00000000 + 0x00001720):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop src pointer
+@(0x00000000 + 0x00001730):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	SUBUS		%SP		%SP		4		; Push dst space
+@(0x00000000 + 0x00001740):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001750):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 144 from =: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00001760):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00001770):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 144 from =: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_=_epilogue						; Return to caller
+@(0x00000000 + 0x00001780):	JUMP		+0x00000010 [+_procedure_=_epilogue]
+DEBUG [1]: 
+_procedure_=_epilogue:
+
+	;; Callee for =: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00001790):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x000017a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x000017b0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_bitand:
+
+	;; Callee for bitand: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x000017c0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x000017d0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+       ADDUS	 %G1	%FP	4	; %G1 = &y
+@(0x00000000 + 0x000017e0):	ADDUS		%G1 [%G1]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	      AND	 *%G0	*%FP	*%G1	; result = x & y
+@(0x00000000 + 0x000017f0):	AND		*%G0 [*%G0]	*%FP [*%FP]	*%G1 [*%G1]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 156 from bitand: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001800):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001810):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001820):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 156 from bitand: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00001830):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00001840):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 156 from bitand: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_bitand_epilogue						; Return to caller
+@(0x00000000 + 0x00001850):	JUMP		+0x00000010 [+_procedure_bitand_epilogue]
+DEBUG [1]: 
+_procedure_bitand_epilogue:
+
+	;; Callee for bitand: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00001860):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00001870):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00001880):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_bitor:
+
+	;; Callee for bitor: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00001890):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x000018a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+       ADDUS	 %G1	%FP	4	; %G1 = &y
+@(0x00000000 + 0x000018b0):	ADDUS		%G1 [%G1]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	      OR	 *%G0	*%FP	*%G1	; result = x | y
+@(0x00000000 + 0x000018c0):	OR		*%G0 [*%G0]	*%FP [*%FP]	*%G1 [*%G1]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 168 from bitor: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000018d0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000018e0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000018f0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 168 from bitor: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00001900):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00001910):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 168 from bitor: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_bitor_epilogue						; Return to caller
+@(0x00000000 + 0x00001920):	JUMP		+0x00000010 [+_procedure_bitor_epilogue]
+DEBUG [1]: 
+_procedure_bitor_epilogue:
+
+	;; Callee for bitor: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00001930):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00001940):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00001950):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_bitnot:
+
+	;; Callee for bitnot: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00001960):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x00001970):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	      NOT	 *%G0	*%FP		; result = ~x
+@(0x00000000 + 0x00001980):	NOT		*%G0 [*%G0]	*%FP [*%FP]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 178 from bitnot: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001990):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000019a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000019b0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 178 from bitnot: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x000019c0):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x000019d0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 178 from bitnot: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_bitnot_epilogue						; Return to caller
+@(0x00000000 + 0x000019e0):	JUMP		+0x00000010 [+_procedure_bitnot_epilogue]
+DEBUG [1]: 
+_procedure_bitnot_epilogue:
+
+	;; Callee for bitnot: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x000019f0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		8		; %G0 = &ra
+@(0x00000000 + 0x00001a00):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00001a10):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_<<:
+
+	;; Callee for <<: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00001a20):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x00001a30):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+       ADDUS	 %G1	%FP	4	; %G1 = &y
+@(0x00000000 + 0x00001a40):	ADDUS		%G1 [%G1]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	      SHFTL	 *%G0	*%FP	*%G1	; result = x << y
+@(0x00000000 + 0x00001a50):	SHFTL		*%G0 [*%G0]	*%FP [*%FP]	*%G1 [*%G1]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 190 from <<: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001a60):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001a70):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001a80):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 190 from <<: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00001a90):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00001aa0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 190 from <<: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_<<_epilogue						; Return to caller
+@(0x00000000 + 0x00001ab0):	JUMP		+0x00000010 [+_procedure_<<_epilogue]
+DEBUG [1]: 
+_procedure_<<_epilogue:
+
+	;; Callee for <<: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00001ac0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00001ad0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00001ae0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_>>:
+
+	;; Callee for >>: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00001af0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x00001b00):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+       ADDUS	 %G1	%FP	4	; %G1 = &y
+@(0x00000000 + 0x00001b10):	ADDUS		%G1 [%G1]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	      SHFTR	 *%G0	*%FP	*%G1	; result = x << y
+@(0x00000000 + 0x00001b20):	SHFTR		*%G0 [*%G0]	*%FP [*%FP]	*%G1 [*%G1]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 202 from >>: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001b30):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001b40):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001b50):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 202 from >>: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00001b60):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00001b70):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 202 from >>: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_>>_epilogue						; Return to caller
+@(0x00000000 + 0x00001b80):	JUMP		+0x00000010 [+_procedure_>>_epilogue]
+DEBUG [1]: 
+_procedure_>>_epilogue:
+
+	;; Callee for >>: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00001b90):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00001ba0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00001bb0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_and:
+
+	;; Callee for and: (prologue) Push locals
+	SUBUS		%SP		%SP		0		; Push locals
+@(0x00000000 + 0x00001bc0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; If-then 223: (a) Evaluate the conditional expression, leaving its result on top of the stack
+	;; Call to !=: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00001bd0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to !=: (prologue b) Evaluate and push arguments
+	;; Call to !=:   Argument #1
+	;; Push integer value 0 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00001be0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0				; Copy the value
+@(0x00000000 + 0x00001bf0):	COPY		*%SP [*%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Call to !=:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001c00):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001c10):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001c20):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001c30):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00001c40):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00001c50):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to !=
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00001c60):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_!=		*%G0				; Do call
+@(0x00000000 + 0x00001c70):	CALL		+0x00000d50 [+_procedure_!=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001c80):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001c90):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00001ca0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; If-then 223: (b) Pop conditional result and branch (or not)
+	COPY		%G0		*%SP				; %G0 = conditional result
+@(0x00000000 + 0x00001cb0):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADD		%SP		%SP		4		; Pop result
+@(0x00000000 + 0x00001cc0):	ADD		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	BEQ		_and_branch_223_end		%G0		0		; If false, jump over then-branch
+@(0x00000000 + 0x00001cd0):	BEQ		0x00001e50 [_and_branch_223_end]	%G0 [%G0]	0x00000000 [0]
+DEBUG [1]: 
+	;; If-then 223: (c) Then-branch
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; If-then 221: (a) Evaluate the conditional expression, leaving its result on top of the stack
+	;; Call to !=: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00001ce0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to !=: (prologue b) Evaluate and push arguments
+	;; Call to !=:   Argument #1
+	;; Push integer value 0 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00001cf0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0				; Copy the value
+@(0x00000000 + 0x00001d00):	COPY		*%SP [*%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Call to !=:   Argument #0
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001d10):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001d20):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001d30):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001d40):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00001d50):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00001d60):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to !=
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00001d70):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_!=		*%G0				; Do call
+@(0x00000000 + 0x00001d80):	CALL		+0x00000c40 [+_procedure_!=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001d90):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001da0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00001db0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; If-then 221: (b) Pop conditional result and branch (or not)
+	COPY		%G0		*%SP				; %G0 = conditional result
+@(0x00000000 + 0x00001dc0):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADD		%SP		%SP		4		; Pop result
+@(0x00000000 + 0x00001dd0):	ADD		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	BEQ		_and_branch_221_end		%G0		0		; If false, jump over then-branch
+@(0x00000000 + 0x00001de0):	BEQ		0x00001e40 [_and_branch_221_end]	%G0 [%G0]	0x00000000 [0]
+DEBUG [1]: 
+	;; If-then 221: (c) Then-branch
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Return statement 219 from and: (a) Evaluate the expression and prepare the destination
+	;; Push integer value 1 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00001df0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		1				; Copy the value
+@(0x00000000 + 0x00001e00):	COPY		*%SP [*%SP]	0x00000001 [1]
+DEBUG [1]: 
+
+	;; Return statement 219 from and: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00001e10):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00001e20):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 219 from and: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_and_epilogue						; Return to caller
+@(0x00000000 + 0x00001e30):	JUMP		+0x00000080 [+_procedure_and_epilogue]
+DEBUG [1]: 
+	;; If-then 221: (d) End
+_and_branch_221_end:
+
+	NOOP								; Placeholder for if-then 221
+@(0x00000000 + 0x00001e40):	NOOP	
+DEBUG [1]: 
+	;; If-then 223: (d) End
+_and_branch_223_end:
+
+	NOOP								; Placeholder for if-then 223
+@(0x00000000 + 0x00001e50):	NOOP	
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 225 from and: (a) Evaluate the expression and prepare the destination
+	;; Push integer value 0 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00001e60):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0				; Copy the value
+@(0x00000000 + 0x00001e70):	COPY		*%SP [*%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Return statement 225 from and: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00001e80):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00001e90):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 225 from and: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_and_epilogue						; Return to caller
+@(0x00000000 + 0x00001ea0):	JUMP		+0x00000010 [+_procedure_and_epilogue]
+DEBUG [1]: 
+_procedure_and_epilogue:
+
+	;; Callee for and: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00001eb0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00001ec0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00001ed0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_or:
+
+	;; Callee for or: (prologue) Push locals
+	SUBUS		%SP		%SP		0		; Push locals
+@(0x00000000 + 0x00001ee0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; If-then 240: (a) Evaluate the conditional expression, leaving its result on top of the stack
+	;; Call to !=: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00001ef0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to !=: (prologue b) Evaluate and push arguments
+	;; Call to !=:   Argument #1
+	;; Push integer value 0 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00001f00):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0				; Copy the value
+@(0x00000000 + 0x00001f10):	COPY		*%SP [*%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Call to !=:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00001f20):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00001f30):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00001f40):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001f50):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00001f60):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00001f70):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to !=
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00001f80):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_!=		*%G0				; Do call
+@(0x00000000 + 0x00001f90):	CALL		+0x00000a30 [+_procedure_!=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00001fa0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00001fb0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00001fc0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; If-then 240: (b) Pop conditional result and branch (or not)
+	COPY		%G0		*%SP				; %G0 = conditional result
+@(0x00000000 + 0x00001fd0):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADD		%SP		%SP		4		; Pop result
+@(0x00000000 + 0x00001fe0):	ADD		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	BEQ		_or_branch_240_end		%G0		0		; If false, jump over then-branch
+@(0x00000000 + 0x00001ff0):	BEQ		0x00002050 [_or_branch_240_end]	%G0 [%G0]	0x00000000 [0]
+DEBUG [1]: 
+	;; If-then 240: (c) Then-branch
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Return statement 238 from or: (a) Evaluate the expression and prepare the destination
+	;; Push integer value 1 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00002000):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		1				; Copy the value
+@(0x00000000 + 0x00002010):	COPY		*%SP [*%SP]	0x00000001 [1]
+DEBUG [1]: 
+
+	;; Return statement 238 from or: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00002020):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00002030):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 238 from or: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_or_epilogue						; Return to caller
+@(0x00000000 + 0x00002040):	JUMP		+0x000001e0 [+_procedure_or_epilogue]
+DEBUG [1]: 
+	;; If-then 240: (d) End
+_or_branch_240_end:
+
+	NOOP								; Placeholder for if-then 240
+@(0x00000000 + 0x00002050):	NOOP	
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; If-then 248: (a) Evaluate the conditional expression, leaving its result on top of the stack
+	;; Call to !=: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002060):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to !=: (prologue b) Evaluate and push arguments
+	;; Call to !=:   Argument #1
+	;; Push integer value 0 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00002070):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0				; Copy the value
+@(0x00000000 + 0x00002080):	COPY		*%SP [*%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Call to !=:   Argument #0
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002090):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000020a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000020b0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x000020c0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000020d0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000020e0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to !=
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x000020f0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_!=		*%G0				; Do call
+@(0x00000000 + 0x00002100):	CALL		+0x000008c0 [+_procedure_!=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002110):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002120):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to !=: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00002130):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; If-then 248: (b) Pop conditional result and branch (or not)
+	COPY		%G0		*%SP				; %G0 = conditional result
+@(0x00000000 + 0x00002140):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADD		%SP		%SP		4		; Pop result
+@(0x00000000 + 0x00002150):	ADD		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	BEQ		_or_branch_248_end		%G0		0		; If false, jump over then-branch
+@(0x00000000 + 0x00002160):	BEQ		0x000021c0 [_or_branch_248_end]	%G0 [%G0]	0x00000000 [0]
+DEBUG [1]: 
+	;; If-then 248: (c) Then-branch
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Return statement 246 from or: (a) Evaluate the expression and prepare the destination
+	;; Push integer value 1 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00002170):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		1				; Copy the value
+@(0x00000000 + 0x00002180):	COPY		*%SP [*%SP]	0x00000001 [1]
+DEBUG [1]: 
+
+	;; Return statement 246 from or: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00002190):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x000021a0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 246 from or: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_or_epilogue						; Return to caller
+@(0x00000000 + 0x000021b0):	JUMP		+0x00000070 [+_procedure_or_epilogue]
+DEBUG [1]: 
+	;; If-then 248: (d) End
+_or_branch_248_end:
+
+	NOOP								; Placeholder for if-then 248
+@(0x00000000 + 0x000021c0):	NOOP	
+DEBUG [1]: 
+	;; Statement #2 of begin-end statement
+	;; Return statement 250 from or: (a) Evaluate the expression and prepare the destination
+	;; Push integer value 0 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x000021d0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0				; Copy the value
+@(0x00000000 + 0x000021e0):	COPY		*%SP [*%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Return statement 250 from or: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x000021f0):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00002200):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 250 from or: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_or_epilogue						; Return to caller
+@(0x00000000 + 0x00002210):	JUMP		+0x00000010 [+_procedure_or_epilogue]
+DEBUG [1]: 
+_procedure_or_epilogue:
+
+	;; Callee for or: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00002220):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00002230):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00002240):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_not:
+
+	;; Callee for not: (prologue) Push locals
+	SUBUS		%SP		%SP		0		; Push locals
+@(0x00000000 + 0x00002250):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; If-then-else 261: (a) Evaluate the conditional expression, leaving its result on top of the stack
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002260):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002270):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002280):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; If-then-else 261: (b) Pop conditional result and branch (or not)
+	COPY		%G0		*%SP				; %G0 = conditional result
+@(0x00000000 + 0x00002290):	COPY		%G0 [%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADD		%SP		%SP		4		; Pop result
+@(0x00000000 + 0x000022a0):	ADD		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	BEQ		_not_branch_261_else		%G0		0		; If false, jump to else-branch
+@(0x00000000 + 0x000022b0):	BEQ		0x00002320 [_not_branch_261_else]	%G0 [%G0]	0x00000000 [0]
+DEBUG [1]: 
+	;; If-then-else 261: (c) Then-branch
+	;; Return statement 258 from not: (a) Evaluate the expression and prepare the destination
+	;; Push integer value 0 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x000022c0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		0				; Copy the value
+@(0x00000000 + 0x000022d0):	COPY		*%SP [*%SP]	0x00000000 [0]
+DEBUG [1]: 
+
+	;; Return statement 258 from not: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x000022e0):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x000022f0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 258 from not: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_not_epilogue						; Return to caller
+@(0x00000000 + 0x00002300):	JUMP		+0x00000080 [+_procedure_not_epilogue]
+DEBUG [1]: 
+	JUMP		_not_branch_261_end						; Jump over else-branch
+@(0x00000000 + 0x00002310):	JUMP		0x00002370 [_not_branch_261_end]
+DEBUG [1]: 
+	;; If-then-else261: (d) Else-branch
+_not_branch_261_else:
+
+	;; Return statement 260 from not: (a) Evaluate the expression and prepare the destination
+	;; Push integer value 1 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00002320):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		1				; Copy the value
+@(0x00000000 + 0x00002330):	COPY		*%SP [*%SP]	0x00000001 [1]
+DEBUG [1]: 
+
+	;; Return statement 260 from not: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00002340):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00002350):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 260 from not: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_not_epilogue						; Return to caller
+@(0x00000000 + 0x00002360):	JUMP		+0x00000020 [+_procedure_not_epilogue]
+DEBUG [1]: 
+	;; If-then-else 261: (e) End
+_not_branch_261_end:
+
+	NOOP								; Placeholder for if-then-else 261
+@(0x00000000 + 0x00002370):	NOOP	
+DEBUG [1]: 
+_procedure_not_epilogue:
+
+	;; Callee for not: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00002380):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		8		; %G0 = &ra
+@(0x00000000 + 0x00002390):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x000023a0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_+:
+
+	;; Callee for +: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x000023b0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x000023c0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+       ADDUS	 %G1	%FP	4	; %G1 = &y
+@(0x00000000 + 0x000023d0):	ADDUS		%G1 [%G1]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	      ADD	 *%G0	*%FP	*%G1	; result = x + y
+@(0x00000000 + 0x000023e0):	ADD		*%G0 [*%G0]	*%FP [*%FP]	*%G1 [*%G1]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 273 from +: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000023f0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002400):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002410):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 273 from +: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00002420):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00002430):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 273 from +: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_+_epilogue						; Return to caller
+@(0x00000000 + 0x00002440):	JUMP		+0x00000010 [+_procedure_+_epilogue]
+DEBUG [1]: 
+_procedure_+_epilogue:
+
+	;; Callee for +: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00002450):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00002460):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00002470):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_-:
+
+	;; Callee for -: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00002480):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x00002490):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+       ADDUS	 %G1	%FP	4	; %G1 = &y
+@(0x00000000 + 0x000024a0):	ADDUS		%G1 [%G1]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	      SUB	 *%G0	*%FP	*%G1	; result = x - y
+@(0x00000000 + 0x000024b0):	SUB		*%G0 [*%G0]	*%FP [*%FP]	*%G1 [*%G1]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 285 from -: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000024c0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000024d0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000024e0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 285 from -: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x000024f0):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00002500):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 285 from -: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_-_epilogue						; Return to caller
+@(0x00000000 + 0x00002510):	JUMP		+0x00000010 [+_procedure_-_epilogue]
+DEBUG [1]: 
+_procedure_-_epilogue:
+
+	;; Callee for -: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00002520):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00002530):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00002540):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_*:
+
+	;; Callee for *: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00002550):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x00002560):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+       ADDUS	 %G1	%FP	4	; %G1 = &y
+@(0x00000000 + 0x00002570):	ADDUS		%G1 [%G1]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	      MUL	 *%G0	*%FP	*%G1	; result = x * y
+@(0x00000000 + 0x00002580):	MUL		*%G0 [*%G0]	*%FP [*%FP]	*%G1 [*%G1]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 297 from *: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002590):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000025a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000025b0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 297 from *: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x000025c0):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x000025d0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 297 from *: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_*_epilogue						; Return to caller
+@(0x00000000 + 0x000025e0):	JUMP		+0x00000010 [+_procedure_*_epilogue]
+DEBUG [1]: 
+_procedure_*_epilogue:
+
+	;; Callee for *: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x000025f0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00002600):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00002610):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_/:
+
+	;; Callee for /: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00002620):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; A literal assembly injection
+	      ADDUS	 %G0	%FP	-4	; %G0 = &result
+@(0x00000000 + 0x00002630):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+       ADDUS	 %G1	%FP	4	; %G1 = &y
+@(0x00000000 + 0x00002640):	ADDUS		%G1 [%G1]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	      DIV	 *%G0	*%FP	*%G1	; result = x / y
+@(0x00000000 + 0x00002650):	DIV		*%G0 [*%G0]	*%FP [*%FP]	*%G1 [*%G1]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 309 from /: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002660):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002670):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002680):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 309 from /: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00002690):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x000026a0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 309 from /: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_/_epilogue						; Return to caller
+@(0x00000000 + 0x000026b0):	JUMP		+0x00000010 [+_procedure_/_epilogue]
+DEBUG [1]: 
+_procedure_/_epilogue:
+
+	;; Callee for /: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x000026c0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x000026d0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x000026e0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_==:
+
+	;; Callee for ==: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x000026f0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002700):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Call to -: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002710):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to -: (prologue b) Evaluate and push arguments
+	;; Call to -:   Argument #1
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002720):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002730):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002740):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002750):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002760):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002770):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002780):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00002790):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000027a0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to -
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x000027b0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_-		*%G0				; Do call
+@(0x00000000 + 0x000027c0):	CALL		+0xfffffcc0 [+_procedure_-]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x000027d0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000027e0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000027f0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference difference
+	;; Push the address of dynamic variable difference
+
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00002800):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		*%SP		%FP		-4		; src = %FP + offset
+@(0x00000000 + 0x00002810):	ADDUS		*%SP [*%SP]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002820):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00002830):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00002840):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00002850):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00002860):	CALL		+0xffffee50 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002870):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002880):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00002890):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 330 from ==: (a) Evaluate the expression and prepare the destination
+	;; Call to not: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000028a0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to not: (prologue b) Evaluate and push arguments
+	;; Call to not:   Argument #0
+	;; Identifier evaluation: difference
+
+	;; Evaluate dynamic variable difference
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000028b0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000028c0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000028d0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		4		; %G0 = &pfp
+@(0x00000000 + 0x000028e0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000028f0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00002900):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to not
+	ADDUS		%G0		%SP		8		; %G0 = &ra
+@(0x00000000 + 0x00002910):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	CALL		+_procedure_not		*%G0				; Do call
+@(0x00000000 + 0x00002920):	CALL		+0xfffff930 [+_procedure_not]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		4		; %G0 = &pfp
+@(0x00000000 + 0x00002930):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002940):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		12		; Pop args/pfp/ra
+@(0x00000000 + 0x00002950):	ADDUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Return statement 330 from ==: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00002960):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00002970):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 330 from ==: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_==_epilogue						; Return to caller
+@(0x00000000 + 0x00002980):	JUMP		+0x00000010 [+_procedure_==_epilogue]
+DEBUG [1]: 
+_procedure_==_epilogue:
+
+	;; Callee for ==: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00002990):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x000029a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x000029b0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_!=:
+
+	;; Callee for !=: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x000029c0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000029d0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Call to -: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x000029e0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to -: (prologue b) Evaluate and push arguments
+	;; Call to -:   Argument #1
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000029f0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002a00):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002a10):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002a20):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002a30):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002a40):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002a50):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00002a60):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00002a70):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to -
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00002a80):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_-		*%G0				; Do call
+@(0x00000000 + 0x00002a90):	CALL		+0xfffff9f0 [+_procedure_-]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002aa0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002ab0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00002ac0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference difference
+	;; Push the address of dynamic variable difference
+
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00002ad0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		*%SP		%FP		-4		; src = %FP + offset
+@(0x00000000 + 0x00002ae0):	ADDUS		*%SP [*%SP]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002af0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00002b00):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00002b10):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00002b20):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00002b30):	CALL		+0xffffeb80 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002b40):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002b50):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00002b60):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 349 from !=: (a) Evaluate the expression and prepare the destination
+	;; Identifier evaluation: difference
+
+	;; Evaluate dynamic variable difference
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002b70):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002b80):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002b90):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Return statement 349 from !=: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00002ba0):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00002bb0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 349 from !=: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_!=_epilogue						; Return to caller
+@(0x00000000 + 0x00002bc0):	JUMP		+0x00000010 [+_procedure_!=_epilogue]
+DEBUG [1]: 
+_procedure_!=_epilogue:
+
+	;; Callee for !=: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00002bd0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00002be0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00002bf0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_<:
+
+	;; Callee for <: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00002c00):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Call to =: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002c10):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to =: (prologue b) Evaluate and push arguments
+	;; Call to =:   Argument #1
+	;; Call to -: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002c20):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to -: (prologue b) Evaluate and push arguments
+	;; Call to -:   Argument #1
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002c30):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002c40):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002c50):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002c60):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002c70):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002c80):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002c90):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00002ca0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00002cb0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to -
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00002cc0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_-		*%G0				; Do call
+@(0x00000000 + 0x00002cd0):	CALL		+0xfffff7b0 [+_procedure_-]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002ce0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002cf0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to -: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00002d00):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to =:   Argument #0
+	;; Reference result
+	;; Push the address of dynamic variable result
+
+	SUBUS		%SP		%SP		4		; Push pointer space
+@(0x00000000 + 0x00002d10):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		*%SP		%FP		-4		; src = %FP + offset
+@(0x00000000 + 0x00002d20):	ADDUS		*%SP [*%SP]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	;; Call to =: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002d30):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00002d40):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00002d50):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to =
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00002d60):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_=		*%G0				; Do call
+@(0x00000000 + 0x00002d70):	CALL		+0xffffe940 [+_procedure_=]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002d80):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002d90):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to =: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00002da0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Statement #1 of begin-end statement
+	;; Return statement 371 from <: (a) Evaluate the expression and prepare the destination
+	;; Call to >>: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002db0):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to >>: (prologue b) Evaluate and push arguments
+	;; Call to >>:   Argument #1
+	;; Push integer value 31 onto stack
+	SUBUS		%SP		%SP		4		; Push word space
+@(0x00000000 + 0x00002dc0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		31				; Copy the value
+@(0x00000000 + 0x00002dd0):	COPY		*%SP [*%SP]	0x0000001f [31]
+DEBUG [1]: 
+
+	;; Call to >>:   Argument #0
+	;; Identifier evaluation: result
+
+	;; Evaluate dynamic variable result
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002de0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		-4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002df0):	ADDUS		%G0 [%G0]	%FP [%FP]	0xfffffffc [-4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002e00):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to >>: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002e10):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00002e20):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00002e30):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to >>
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00002e40):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_>>		*%G0				; Do call
+@(0x00000000 + 0x00002e50):	CALL		+0xffffeca0 [+_procedure_>>]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to >>: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002e60):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002e70):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to >>: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00002e80):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Return statement 371 from <: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00002e90):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00002ea0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 371 from <: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_<_epilogue						; Return to caller
+@(0x00000000 + 0x00002eb0):	JUMP		+0x00000010 [+_procedure_<_epilogue]
+DEBUG [1]: 
+_procedure_<_epilogue:
+
+	;; Callee for <: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00002ec0):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00002ed0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00002ee0):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_>:
+
+	;; Callee for >: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00002ef0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Return statement 393 from >: (a) Evaluate the expression and prepare the destination
+	;; Call to not: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002f00):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to not: (prologue b) Evaluate and push arguments
+	;; Call to not:   Argument #0
+	;; Call to or: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002f10):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to or: (prologue b) Evaluate and push arguments
+	;; Call to or:   Argument #1
+	;; Call to ==: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00002f20):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to ==: (prologue b) Evaluate and push arguments
+	;; Call to ==:   Argument #1
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002f30):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002f40):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002f50):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00002f60):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00002f70):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00002f80):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002f90):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00002fa0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00002fb0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to ==
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00002fc0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_==		*%G0				; Do call
+@(0x00000000 + 0x00002fd0):	CALL		+0xfffff720 [+_procedure_==]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00002fe0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00002ff0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00003000):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to or:   Argument #0
+	;; Call to <: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00003010):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to <: (prologue b) Evaluate and push arguments
+	;; Call to <:   Argument #1
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00003020):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00003030):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00003040):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00003050):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00003060):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00003070):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00003080):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00003090):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000030a0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to <
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x000030b0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_<		*%G0				; Do call
+@(0x00000000 + 0x000030c0):	CALL		+0xfffffb40 [+_procedure_<]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x000030d0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000030e0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000030f0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to or: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00003100):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00003110):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00003120):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to or
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00003130):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_or		*%G0				; Do call
+@(0x00000000 + 0x00003140):	CALL		+0xffffeda0 [+_procedure_or]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to or: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00003150):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00003160):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to or: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00003170):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to not: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		4		; %G0 = &pfp
+@(0x00000000 + 0x00003180):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00003190):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000031a0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to not
+	ADDUS		%G0		%SP		8		; %G0 = &ra
+@(0x00000000 + 0x000031b0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	CALL		+_procedure_not		*%G0				; Do call
+@(0x00000000 + 0x000031c0):	CALL		+0xfffff090 [+_procedure_not]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		4		; %G0 = &pfp
+@(0x00000000 + 0x000031d0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000031e0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		12		; Pop args/pfp/ra
+@(0x00000000 + 0x000031f0):	ADDUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Return statement 393 from >: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x00003200):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x00003210):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 393 from >: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_>_epilogue						; Return to caller
+@(0x00000000 + 0x00003220):	JUMP		+0x00000010 [+_procedure_>_epilogue]
+DEBUG [1]: 
+_procedure_>_epilogue:
+
+	;; Callee for >: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00003230):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00003240):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00003250):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_<=:
+
+	;; Callee for <=: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00003260):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Return statement 413 from <=: (a) Evaluate the expression and prepare the destination
+	;; Call to or: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00003270):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to or: (prologue b) Evaluate and push arguments
+	;; Call to or:   Argument #1
+	;; Call to ==: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00003280):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to ==: (prologue b) Evaluate and push arguments
+	;; Call to ==:   Argument #1
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00003290):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000032a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000032b0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000032c0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000032d0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000032e0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x000032f0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00003300):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00003310):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to ==
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00003320):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_==		*%G0				; Do call
+@(0x00000000 + 0x00003330):	CALL		+0xfffff3c0 [+_procedure_==]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00003340):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00003350):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to ==: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00003360):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to or:   Argument #0
+	;; Call to <: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00003370):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to <: (prologue b) Evaluate and push arguments
+	;; Call to <:   Argument #1
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00003380):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00003390):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000033a0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000033b0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000033c0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000033d0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x000033e0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000033f0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00003400):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to <
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00003410):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_<		*%G0				; Do call
+@(0x00000000 + 0x00003420):	CALL		+0xfffff7e0 [+_procedure_<]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00003430):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00003440):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00003450):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to or: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x00003460):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00003470):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00003480):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to or
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00003490):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_or		*%G0				; Do call
+@(0x00000000 + 0x000034a0):	CALL		+0xffffea40 [+_procedure_or]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to or: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x000034b0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000034c0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to or: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x000034d0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Return statement 413 from <=: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x000034e0):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x000034f0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 413 from <=: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_<=_epilogue						; Return to caller
+@(0x00000000 + 0x00003500):	JUMP		+0x00000010 [+_procedure_<=_epilogue]
+DEBUG [1]: 
+_procedure_<=_epilogue:
+
+	;; Callee for <=: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00003510):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00003520):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00003530):	JUMP		*%G0 [*%G0]
+DEBUG [1]: 
+
+	;; Procedure entry point
+_procedure_>=:
+
+	;; Callee for >=: (prologue) Push locals
+	SUBUS		%SP		%SP		4		; Push locals
+@(0x00000000 + 0x00003540):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+
+	;; Start begin-end statement
+	;; Statement #0 of begin-end statement
+	;; Return statement 429 from >=: (a) Evaluate the expression and prepare the destination
+	;; Call to not: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00003550):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to not: (prologue b) Evaluate and push arguments
+	;; Call to not:   Argument #0
+	;; Call to <: (prologue a) Create base of caller frame segment
+	SUBUS		%SP		%SP		12		; Push pfp/ra[/rv] spaces
+@(0x00000000 + 0x00003560):	SUBUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Call to <: (prologue b) Evaluate and push arguments
+	;; Call to <:   Argument #1
+	;; Identifier evaluation: y
+
+	;; Evaluate dynamic variable y
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x00003570):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		4		; %G0 = src = %FP + offset
+@(0x00000000 + 0x00003580):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x00003590):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <:   Argument #0
+	;; Identifier evaluation: x
+
+	;; Evaluate dynamic variable x
+	SUBUS		%SP		%SP		4		; Push space for resulting value, %SP = dst
+@(0x00000000 + 0x000035a0):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		0		; %G0 = src = %FP + offset
+@(0x00000000 + 0x000035b0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000000 [0]
+DEBUG [1]: 
+	COPY		*%SP		*%G0				; *dst = *src
+@(0x00000000 + 0x000035c0):	COPY		*%SP [*%SP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		8		; %G0 = &pfp
+@(0x00000000 + 0x000035d0):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x000035e0):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x000035f0):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to <
+	ADDUS		%G0		%SP		12		; %G0 = &ra
+@(0x00000000 + 0x00003600):	ADDUS		%G0 [%G0]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	CALL		+_procedure_<		*%G0				; Do call
+@(0x00000000 + 0x00003610):	CALL		+0xfffff5f0 [+_procedure_<]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		8		; %G0 = &pfp
+@(0x00000000 + 0x00003620):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000008 [8]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x00003630):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to <: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		16		; Pop args/pfp/ra
+@(0x00000000 + 0x00003640):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000010 [16]
+DEBUG [1]: 
+	;; Call to not: (prologue c) Preserve and update frame pointer
+	ADDUS		%G0		%SP		4		; %G0 = &pfp
+@(0x00000000 + 0x00003650):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		*%G0		%FP				; pfp = %FP
+@(0x00000000 + 0x00003660):	COPY		*%G0 [*%G0]	%FP [%FP]
+DEBUG [1]: 
+	COPY		%FP		%SP				; %FP = %SP
+@(0x00000000 + 0x00003670):	COPY		%FP [%FP]	%SP [%SP]
+DEBUG [1]: 
+	;; Call to not
+	ADDUS		%G0		%SP		8		; %G0 = &ra
+@(0x00000000 + 0x00003680):	ADDUS		%G0 [%G0]	%SP [%SP]	0x00000008 [8]
+DEBUG [1]: 
+	CALL		+_procedure_not		*%G0				; Do call
+@(0x00000000 + 0x00003690):	CALL		+0xffffebc0 [+_procedure_not]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (epilogue a) Restore FP
+	ADDUS		%G0		%FP		4		; %G0 = &pfp
+@(0x00000000 + 0x000036a0):	ADDUS		%G0 [%G0]	%FP [%FP]	0x00000004 [4]
+DEBUG [1]: 
+	COPY		%FP		*%G0				; Restore FP
+@(0x00000000 + 0x000036b0):	COPY		%FP [%FP]	*%G0 [*%G0]
+DEBUG [1]: 
+	;; Call to not: (epilogue b) Pop all but rv
+	ADDUS		%SP		%SP		12		; Pop args/pfp/ra
+@(0x00000000 + 0x000036c0):	ADDUS		%SP [%SP]	%SP [%SP]	0x0000000c [12]
+DEBUG [1]: 
+	;; Return statement 429 from >=: (b) Copy single-word return value into place
+	COPY		*%G0		*%SP				; Copy expression result into rv
+@(0x00000000 + 0x000036d0):	COPY		*%G0 [*%G0]	*%SP [*%SP]
+DEBUG [1]: 
+	ADDUS		%SP		%SP		4		; Pop expression result
+@(0x00000000 + 0x000036e0):	ADDUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	;; Return statement 429 from >=: (c) Jump to callee epilogue, since return statements take effect immediately
+	JUMP		+_procedure_>=_epilogue						; Return to caller
+@(0x00000000 + 0x000036f0):	JUMP		+0x00000010 [+_procedure_>=_epilogue]
+DEBUG [1]: 
+_procedure_>=_epilogue:
+
+	;; Callee for >=: (epilogue) Pop locals and return
+
+	COPY		%SP		%FP				; Pop locals and temp results
+@(0x00000000 + 0x00003700):	COPY		%SP [%SP]	%FP [%FP]
+DEBUG [1]: 
+	ADDUS		%G0		%FP		12		; %G0 = &ra
+@(0x00000000 + 0x00003710):	ADDUS		%G0 [%G0]	%FP [%FP]	0x0000000c [12]
+DEBUG [1]: 
+	JUMP		*%G0						; Return to caller
+@(0x00000000 + 0x00003720):	JUMP		*%G0 [*%G0]
+DEBUG [1]: @(0x00003730 + 0x00000000): 0x00000000
+DEBUG [1]: @(0x00003730 + 0x00000004): 0x00000000
+DEBUG [1]: @(0x00003730 + 0x00000008): 0x00000000
+DEBUG [1]: @(0x00003730 + 0x0000000c): 0x00000000
+DEBUG [1]: @(0x00003740 + 0x00000000): "Just as long as you stand. "
