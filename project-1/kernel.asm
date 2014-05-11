@@ -157,7 +157,7 @@ find_block_loop_top:
 find_block_continue_loop:
 	;; Advance to the next entry.
 	ADDUS		%G2			%G2		12
-	JUMP		+find_device_loop_top
+	JUMP		+find_block_loop_top
 find_block_loop_failure:
 	;; Set the return value to a null pointer.
 	HALT
@@ -175,7 +175,8 @@ find_block_loop_success:
     SUBUS   *%G0    *%G2    4       ;; initialize address of trigger on block device
     COPY    %G0     +block_num
     SUBUS   *%G0    *%G2    8       ;; initialize address of block device block # input
-    
+    COPY    %G0     +block_buffer_limit
+    SUBUS   *%G0    *%G2    12      ;; initialize address for buffer limit (base + 4096)
     
 
 	;; 1. WRITE CODE TO COPY INIT TO RAM HERE, THEN JUMP TO IT.
@@ -204,8 +205,15 @@ find_block_loop_success:
 	COPY	*%SP	0x00			; Kernel is this program's parent
 	CALL	+process_table_Add	*%G0		; Need to make PTADD more automatic. 
 
+    ;; this is a function call to "fileExists" function.
+    COPY %G0 +return           ;; copy +return into a register
+	CALL +fileExists_Args *%G0   ;; call the functions Args section
+	COPY *%SP +file_name          ;; copy your argument into the SP
+	CALL +fileExists *%G0         ;; call the function itself. 
+    ;; complete function call! 
 
-	;; Run init
+
+	;; Run init, if it exists. 
 	;; everything above this works. 
 	JUMP	+process_table_Run_Next
 	
@@ -1175,6 +1183,165 @@ fd2:
 	JUMP	*+return	;Jump to the return address specified in stack 
 	
 
+	;; check if file exists, returns block # if it does, returns 0 if it does not.
+    ;; basically map's string to inode. Takes pointer to a filename as it's parameter. 
+fileExists_Args:
+	SUBUS	%SP	%SP	4
+	JUMP	+fArgs
+
+fileExists:
+	SUBUS %SP %SP 4
+	COPY *%SP 1
+	COPY  %G0 +return2
+	CALL +fCall *%G0
+
+	;; block_trigger, block_base, block_limit, block_num
+    ;COPY %G0    *+block_num
+	;COPY *%G0 0x01          ;; first block, has filename -> inode number mappings
+    ;COPY %G0    *+block_trigger
+	;COPY *%G0 0x00
+    
+    COPY %G0 +return
+    CALL +open_Block_Args *%G0
+    COPY *%SP 1
+    CALL +open_Block *%G0
+
+    COPY %G3 0x0                ;; offset within the files we are looking at
+    COPY %G4 *+block_base       ;; %G5 has the block base
+
+	ADDUS %G0 %G3 *%FP          ;; %G0 now holds the first (only) argument, which is the address holding the base of the string filename
+	COPYB %G1 *%G0              ;; %G1 now holds the first byte of this file name
+    
+    ADDUS %G0 %G3 %G4           ;; %G0 now points to the first character in the file table
+    COPYB %G2 *%G0              ;; %G4 now holds that first byte of this file name
+
+
+    searchFilesTop:             ;; outer loop (goes through each filename in the table)
+        BGTE +searchFilesFail %G4 *+block_buffer_limit          ;; if we searched entire file table, we couldn't find it.
+
+    parseFileNameTop: ;; inner loop (goes through characters in filename)
+        BGTE +parseFileNameEnd %G3 12
+
+        ADDUS %G0 %G3 *%FP          ;; %G0 now holds the first (only) argument, which is the address holding the base of the string filename
+        COPYB %G1 *%G0              ;; %G1 now holds the first byte of this file name
+
+        ADDUS %G0 %G3 %G4           ;; %G0 now points to the first character in the file table
+        COPYB %G2 *%G0              ;; %G4 now holds that first byte of this file name
+
+        BNEQ +parseFileFail %G1 %G2 ;; if the two characters don't match, then move to next entry.
+        ADDUS %G3 %G3 1             ;; if they do match, try next char in filename and in table entry name.
+        JUMP +parseFileNameTop
+
+    parseFileNameEnd:               ;; file found at this point!
+        ADDUS %G4 %G4 12            ;; %G4 points to the block number of found file
+        SUBUS %SP %SP 4             ;; begin burying result.
+        COPY *%SP *%G4              ;; save file number into stack where return value should be
+        COPY %G0 +return
+        ADDUS %SP %SP 4             ;; Since we decremented before calling fArgs, we have to increment it back
+        CALL +print_Args *%G0
+        COPY *%SP +file_found
+        CALL +print *%G0
+        JUMP +fDone
+
+
+    parseFileFail:                  ;; Checked entry did not contain file name. So check next entry.
+        COPY %G3 0x0                ;; reset offset
+        ADDUS %G4 %G4 16            ;; increment %G4, which is the entry in the table we are looking at
+        JUMP +searchFilesTop        ;; Jump back to the top and search again
+
+    searchFilesFail:                ;; we searched entire file table and couldn't find file
+        SUBUS %SP %SP 4
+        COPY *%SP 0x00              ;; 0x00 will be this function's return value when file not found
+        COPY %G0 +return
+        ADDUS %SP %SP 4             ;; bury the result so that fDone will find it
+        CALL +print_Args *%G0
+        COPY *%SP +file_not_found
+        CALL +print *%G0
+        JUMP +fDone                 ;; Jump to fDone for epilogue
+
+
+
+;;; print function(pointer to string), return value - none
+;;; prints each character to the console until it reaches a null value.
+print_Args:
+    JUMP    +fArgs
+    
+print:
+    SUBUS %SP %SP 4
+	COPY *%SP 0
+	COPY  %G0 +return2
+	CALL +fCall *%G0
+
+    COPY %G1 *%FP                   ;; %G1 has first address of string to be printed
+    ADDUS %G3 0x190 *+console_base         ;; %G3 initializes to console_base
+    COPY %G5 0x00
+    
+   ;; space_loop:
+     ;;   BGTE +print_loop %G5 0x50
+       ; ADDUS %G4 %G5 %G3
+        ;ADDUS %G5 %G5 1
+        ;COPYB %G4 0x20
+        ;ADDUS %G4
+    print_loop:
+        COPYB %G0 *%G1                  ;; %G0 will carry the bytes
+        COPYB *%G3 %G0                  ;; put %G0's character in console
+        BEQ +print_done %G0 0           ;; break if character is null
+        ADDUS %G3 %G3 1                 ;; move foward in console
+        ADDUS %G1 %G1 1                 ;; move forward in string to be printed
+        JUMP +print_loop
+    print_done:
+        JUMP +fDone
+
+;;; prints "File Not Found" if input is 0
+;;; prints "File Found!" if input is non-0
+print_Result_Args:
+    JUMP    +fArgs
+    
+print_Result:
+    SUBUS %SP %SP 4
+	COPY *%SP 0
+	COPY  %G0 +return2
+	CALL +fCall *%G0
+    
+    COPY %G0 *%FP
+    BEQ +print_file_not_found %G0 0
+        COPY %G0 +return
+        CALL +print_Args *%G0
+        COPY *%SP +file_found
+        CALL +print *%G0
+        JUMP +fDone
+
+
+    
+    print_file_not_found:
+        CALL +print_Args *%G0
+        COPY *%SP +file_not_found
+        CALL +print *%G0
+        JUMP +fDone
+
+    
+;;; Open Buffer Function: Inputs the block# into the block_device and triggers a read. 
+;;; args: 1.block#  results: 0 
+
+open_Block_Args: 
+	JUMP +fArgs
+	
+open_Block: 
+	SUBUS	%SP %SP 4
+	COPY	*%SP	0
+	COPY	%G0 +return2
+	CALL	+fCall *%G0
+	
+
+	COPY	%G0	*%FP			;Gets block#
+
+	SUBUS	%G1 *+block_limit 8	;Limit of block device-8
+	COPY	*%G1 %G0			;Puts the block# at the limit(limit-8) of the block device
+	
+	ADDUS	%G1 %G1	4			;block_limit set to (limit-4)
+	COPY	*%G1 0				;triggers read by inputting a 0 into the block device's r/w place
+	
+	JUMP	+fDone				;Jumps to fDone
 
 
 	.Numeric
@@ -1234,6 +1401,14 @@ block_base: 0x00
 block_limit: 0x00
 block_num: 0x00
 block_trigger: 0x00
+block_buffer_limit: 0x00
 
 	;; Will load the next program, and run it in user mode
 	;; Doesn't matter if programs don't finish. 
+
+.Text
+
+file_name: "somefile.txt"
+file_not_found: "file does not exists"
+file_found: "file found!"
+
