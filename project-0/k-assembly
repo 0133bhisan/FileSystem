@@ -1,0 +1,35 @@
+#! /bin/bash 
+
+# Check usage.
+if [ ! -n "$1" ]
+then
+
+        printf "USAGE: k-assembler <k assembly code filename>\n"
+exit 1
+		
+fi
+
+# Assign a variable name to the machine code file.
+assemblyCodePath=$1
+
+
+# Assign some useful constants into variables.
+# set kSystemBase = ~sfkaplan/public/cs261/k-system/
+# set kSystemBase = /home/sfkaplan/Dropbox/classes/systems-II/k-system/
+kSystemBase=/Users/Ringz/Documents/Compsci/Programming/Systems/261/COSC-261
+assemblerCodeDirectory=${kSystemBase}/assembler
+kernel="${kSystemBase}/project-1/kernel.asm"
+# assemblyCodePath="${kernel}"
+
+
+# Strip the file type suffix and check it.
+assemblyCodeSuffix=`printf "${assemblyCodePath}" | awk -F '.' '{ print $NF }'`
+assemblyCodeBase=`printf "${assemblyCodePath}" | awk -F '.' '{ for (i = 1; i < NF - 1; ++i) printf ("%s.", $i); printf("%s", $(NF - 1)) }'`
+if [ ! ${assemblyCodeSuffix} == "asm" ]
+then
+	printf "ERROR: .asm file required as input.\n"
+#exit 1
+fi
+
+java -classpath ${assemblerCodeDirectory} Assembler ${assemblyCodeBase} 
+

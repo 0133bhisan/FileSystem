@@ -1,0 +1,48 @@
+
+#! /usr/bin/bash
+
+# Check usage.
+if [ $# -lt 1 ]
+then
+	printf "USAGE: k-simulator <executable image pathname list...>\n"
+	printf "Will use default Roms for now"
+	#exit 1
+fi
+
+# Assign a variable name to the machine code file.
+# set machineCodePathList = ( ${argv} )
+
+# Assign some useful constants into variables.
+#set kSystemBase=/home/sfkaplan/public/cs261/k-system/
+#set kSystemBase=/home/sfkaplan/Dropbox/classes/systems-II/k-system
+kSystemBase=/Users/Ringz/Documents/Compsci/Programming/Systems/261/COSC-261
+simulatorCodeDirectory=${kSystemBase}/simulator
+
+jline=${simulatorCodeDirectory}/jline_folder
+bios=${kSystemBase}/project-0/bios.vmx
+kernel=${kSystemBase}/project-1/kernel.vmx
+init=${kSystemBase}/project-0/init.vmx
+test=${kSystemBase}/project-0/test0.vmx
+add=${kSystemBase}/project-0/add-two-numbers.vmx
+
+input="$*"
+machineCodePathList="$bios $kernel $init ${input}"
+
+mainMemorySize=256
+blockDevicePath=${simulatorCodeDirectory}/block-device.data
+
+if [ ! -f ${blockDevicePath} ]
+then
+	printf "Creating empty block device backing ${blockDevicePath}..."
+	dd if=/dev/zero of=${blockDevicePath} bs=4096 count=1024 >& /dev/null
+	if [ ! ${status} -eq 0 ]
+	then
+		printf "failed!\n"
+		exit 1
+	fi
+	printf "done.\n"
+fi
+
+# printf "Code path = ${simulatorCodeDirectory}\n"
+java -classpath "${simulatorCodeDirectory}:${jline}" Simulator ${mainMemorySize} ${blockDevicePath} ${machineCodePathList}
+	

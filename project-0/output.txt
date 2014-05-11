@@ -1,0 +1,88 @@
+DEBUG [1]: 
+;;; Meaningless copy of add-two-numbers to test clock.
+
+
+
+;;; The entry point.
+__start:
+
+
+	;; Initialize the stack at the limit.
+	COPY	%SP	*+limit	
+@(0x00000000 + 0x00000000):	COPY		%SP [%SP]	*+0x0000015c [*+limit]
+DEBUG [1]: 
+
+	;; Copy one of the source values into a register.
+	COPY	%G0	*+x
+@(0x00000000 + 0x00000010):	COPY		%G0 [%G0]	*+0x00000144 [*+x]
+DEBUG [1]: 
+	
+	;; Allocate a space on the stack for the result.
+	SUBUS	%SP	%SP	4
+@(0x00000000 + 0x00000020):	SUBUS		%SP [%SP]	%SP [%SP]	0x00000004 [4]
+DEBUG [1]: 
+	
+	;; Sum the two values.  In particular:
+	;;   src A (%G0): A value taken from a register.
+	;;   src B (*+y): A indirect value stored in a static space named by a label.
+	;;   dst   (%SP): A register that contains a pointer to a main memory space.
+	ADD	*%SP	%G0	*+y
+@(0x00000000 + 0x00000030):	ADD		*%SP [*%SP]	%G0 [%G0]	*+0x00000128 [*+y]
+DEBUG [1]: 
+	
+	COPY	%G2		5
+@(0x00000000 + 0x00000040):	COPY		%G2 [%G2]	0x00000005 [5]
+DEBUG [1]: 
+	COPY	%G3		6
+@(0x00000000 + 0x00000050):	COPY		%G3 [%G3]	0x00000006 [6]
+DEBUG [1]: 
+	COPY	%G1		4
+@(0x00000000 + 0x00000060):	COPY		%G1 [%G1]	0x00000004 [4]
+DEBUG [1]: 
+	ADD		%G4		%G2		%G1
+@(0x00000000 + 0x00000070):	ADD		%G4 [%G4]	%G2 [%G2]	%G1 [%G1]
+DEBUG [1]: 
+	SUBUS	%G5		%G3		%G1
+@(0x00000000 + 0x00000080):	SUBUS		%G5 [%G5]	%G3 [%G3]	%G1 [%G1]
+DEBUG [1]: 
+	MUL		%G5		%G5		%G5
+@(0x00000000 + 0x00000090):	MUL		%G5 [%G5]	%G5 [%G5]	%G5 [%G5]
+DEBUG [1]: 
+	COPY	%G2		5
+@(0x00000000 + 0x000000a0):	COPY		%G2 [%G2]	0x00000005 [5]
+DEBUG [1]: 
+	COPY	%G3		6
+@(0x00000000 + 0x000000b0):	COPY		%G3 [%G3]	0x00000006 [6]
+DEBUG [1]: 
+	COPY	%G1		4
+@(0x00000000 + 0x000000c0):	COPY		%G1 [%G1]	0x00000004 [4]
+DEBUG [1]: 
+	ADD		%G4		%G2		%G1
+@(0x00000000 + 0x000000d0):	ADD		%G4 [%G4]	%G2 [%G2]	%G1 [%G1]
+DEBUG [1]: 
+	SUBUS	%G5		%G3		%G1
+@(0x00000000 + 0x000000e0):	SUBUS		%G5 [%G5]	%G3 [%G3]	%G1 [%G1]
+DEBUG [1]: 
+	COPY	%G2		5
+@(0x00000000 + 0x000000f0):	COPY		%G2 [%G2]	0x00000005 [5]
+DEBUG [1]: 
+	COPY	%G3		6
+@(0x00000000 + 0x00000100):	COPY		%G3 [%G3]	0x00000006 [6]
+DEBUG [1]: 
+	COPY	%G1		4
+@(0x00000000 + 0x00000110):	COPY		%G1 [%G1]	0x00000004 [4]
+DEBUG [1]: 
+	ADD		%G4		%G2		%G1
+@(0x00000000 + 0x00000120):	ADD		%G4 [%G4]	%G2 [%G2]	%G1 [%G1]
+DEBUG [1]: 
+	SUBUS	%G5		%G3		%G1
+@(0x00000000 + 0x00000130):	SUBUS		%G5 [%G5]	%G3 [%G3]	%G1 [%G1]
+DEBUG [1]: 
+
+	;; Halt the processor.
+	SYSC
+@(0x00000000 + 0x00000140):	SYSC	
+DEBUG [1]: @(0x00000150 + 0x00000000): 0x00000000
+DEBUG [1]: @(0x00000150 + 0x00000004): 0x00000005
+DEBUG [1]: @(0x00000150 + 0x00000008): 0xfffffffd
+DEBUG [1]: @(0x00000150 + 0x0000000c): 0x00005000
